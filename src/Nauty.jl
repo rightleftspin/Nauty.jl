@@ -354,13 +354,17 @@ function lg_to_nauty(g::GraphType) where GraphType <: Graphs.AbstractGraph
     return arr.chunks #, num_setwords, num_vertices
 end
 
-function fadjlist(g::GraphType) where GraphType <: Graphs.SimpleGraphs.AbstractSimpleGraph
-    return g.fadjlist
+function fadjlist(g::GraphType) where GraphType <: Graphs.AbstractGraph
+    return g.adj
 end
 
-#import MetaGraphs
+#function fadjlist(g::GraphType) where GraphType <: Graphs.SimpleGraphs.AbstractSimpleGraph
+#    return g.fadjlist
+#end
 #
-#function fadjlist(g::GraphType) where GraphType <: MetaGraphs.AbstractMetaGraph
+#import MetaGraphsNext
+#
+#function fadjlist(g::GraphType) where GraphType <: MetaGraphsNext.AbstractMetaGraph
 #    return g.graph.fadjlist
 #end
 
