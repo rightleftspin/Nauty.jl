@@ -355,12 +355,12 @@ function lg_to_nauty(g::GraphType) where GraphType <: Graphs.AbstractGraph
 end
 
 function fadjlist(g::GraphType) where GraphType <: Graphs.AbstractGraph
-    return Graphs.adj(g)
+    return Graphs.SimpleGraphs.adj(g)
 end
 
 import MetaGraphsNext
 function fadjlist(g::GraphType) where GraphType <: MetaGraphsNext.MetaGraph
-    return Graphs.adj(g.graph)
+    return Graphs.SimpleGraphs.adj(g.graph)
 end
 
 """
