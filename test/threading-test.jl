@@ -1,9 +1,9 @@
-using LightGraphs
+using Graphs
 using Nauty
 using Test
 
 function dowork()
-   g = LightGraphs.barabasi_albert(63, 5)
+   g = Graphs.barabasi_albert(63, 5)
    Nauty.baked_canonical_form(g).canong
 end
 
