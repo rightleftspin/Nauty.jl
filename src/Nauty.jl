@@ -358,12 +358,6 @@ function fadjlist(g::GraphType) where GraphType <: Graphs.AbstractGraph
     return Graphs.SimpleGraphs.adj(g)
 end
 
-import MetaGraphsNext
-
-function fadjlist(g::GraphType) where GraphType <: MetaGraphsNext.MetaGraph
-    return Graphs.SimpleGraphs.adj(g.graph)
-end
-
 """
     label_to_adj(label)
 
