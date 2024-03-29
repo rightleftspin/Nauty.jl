@@ -359,6 +359,7 @@ function fadjlist(g::GraphType) where GraphType <: Graphs.AbstractGraph
 end
 
 import MetaGraphsNext
+
 function fadjlist(g::GraphType) where GraphType <: MetaGraphsNext.MetaGraph
     return Graphs.SimpleGraphs.adj(g.graph)
 end
