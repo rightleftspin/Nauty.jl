@@ -1,5 +1,6 @@
-import LightGraphs
-lg = LightGraphs
+import Graphs
+import Pkg
+lg = Graphs
 
 Pkg.build("Nauty")
 Pkg.test("Nauty")

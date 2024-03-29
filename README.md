@@ -1,6 +1,6 @@
 # Nauty.jl
 
-Simple wrapper for using `nauty`, a graph isomorphism package, with `LightGraphs` in Julia. Requires `gcc` and a POSIX style build environment.
+Simple wrapper for using `nauty`, a graph isomorphism package, with `Graphs` in Julia. Requires `gcc` and a POSIX style build environment.
 
 **Currently under development. Interface may change / break by the day.**
 
@@ -12,19 +12,12 @@ Check if two graphs are isomorphs of each other:
 baked_canonical_form(g1).canong == baked_canonical_form(g2).canong
 ```
 
-LightGraphs interface:
-
-```julia
-using Nauty
-BenchmarkTools.@btime LightGraphs.Experimental.has_isomorph(g1,g2,alg=NautyAlg())
-```
-
 If you need to provide custom options to nauty, use `densenauty(g, optionblk(optionblk_mutable(DEFAULTOPTIONS_GRAPH)))`, but be aware that it is around 2-4x slower than using baked in options as Julia cannot optimise across the `C` boundary. Consider baking your own. 
 
 ## Todo
 
  - Friendlier return types
- - NautyGraph -> LightGraph
+ - NautyGraph -> Graph
  - MetaGraph -> (NautyGraph, labels, partition)
  - isomorphOf() / congruence operator
  - Documentation (documenter.jl)
@@ -36,7 +29,7 @@ If you need to provide custom options to nauty, use `densenauty(g, optionblk(opt
 
 ## API
 
-canonical_isomorph(g: LightGraph) -> g'
+canonical_isomorph(g: AbstractGraph) -> g'
 canonical_isomorph(g: ColouredGraph) -> g'
     - We'll have to use the relabelling information to make g'
 

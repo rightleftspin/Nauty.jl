@@ -12,9 +12,9 @@ export has_isomorph, NautyAlg
 end
 
 using Libdl: dlext
-import LightGraphs
+import Graphs
 
-struct NautyAlg <: LightGraphs.Experimental.IsomorphismAlgorithm end
+struct NautyAlg <: Graphs.Experimental.IsomorphismAlgorithm end
 
 function depsdir(pkg::AbstractString)
     pkgdir = Base.find_package(pkg)
@@ -204,7 +204,7 @@ end
 
 Raw interface to nauty.c/densenauty. See section 6 (Calling nauty and Traces) of the nauty and Traces User's Guide for the authoritative definition of these parameters. Returns `nautyreturn`.
 
-    densenauty(g::GraphType, options = optionblk()) where GraphType <: LightGraphs.AbstractGraph
+    densenauty(g::GraphType, options = optionblk()) where GraphType <: Graphs.AbstractGraph
 
 Equivalent to densenauty(lg_to_nauty(g), options).
 """
@@ -243,7 +243,7 @@ function densenauty(g::NautyGraph,
     return nautyreturn(outgraph, labelling, partition, orbits, stats)
 end
 
-function baked_canonical_form(g::GraphType) where GraphType <: LightGraphs.AbstractGraph
+function baked_canonical_form(g::GraphType) where GraphType <: Graphs.AbstractGraph
     g = lg_to_nauty(g)
     (num_vertices, num_setwords) = (size(g, 1),size(g, 2))
     stats = statsblk()
@@ -262,7 +262,7 @@ function baked_canonical_form(g::GraphType) where GraphType <: LightGraphs.Abstr
     return nautyreturn(outgraph, labelling, partition, orbits, stats)
 end
 
-function baked_canonical_form_color(g::GraphType,labelling, partition) where GraphType <: LightGraphs.AbstractGraph
+function baked_canonical_form_color(g::GraphType,labelling, partition) where GraphType <: Graphs.AbstractGraph
     g = lg_to_nauty(g)
     (num_vertices, num_setwords) = size(g, 1, 2)
     stats = statsblk()
@@ -278,7 +278,7 @@ function baked_canonical_form_color(g::GraphType,labelling, partition) where Gra
     return nautyreturn(outgraph, labelling, partition, orbits, stats)
 end
 
-function baked_canonical_form_and_stats(g::GraphType) where GraphType <: LightGraphs.AbstractGraph
+function baked_canonical_form_and_stats(g::GraphType) where GraphType <: Graphs.AbstractGraph
     g = lg_to_nauty(g)
     (num_vertices, num_setwords) = size(g, 1, 2)
 
@@ -296,7 +296,7 @@ function baked_canonical_form_and_stats(g::GraphType) where GraphType <: LightGr
     return outgraph, labelling, partition, orbits
 end
 
-function densenauty(g::GraphType, options = DEFAULTOPTIONS_GRAPH) where GraphType <: LightGraphs.AbstractGraph
+function densenauty(g::GraphType, options = DEFAULTOPTIONS_GRAPH) where GraphType <: Graphs.AbstractGraph
     return densenauty(lg_to_nauty(g), options)
 end
 
@@ -322,11 +322,11 @@ end
 
 
 """
-    lg_to_nauty(g::LightGraphs.AbstractGraph)
+    lg_to_nauty(g::Graphs.AbstractGraph)
 
 Convert to nauty-compatible adjacency matrix (uint array).
 """
-function lg_to_nauty(g::GraphType) where GraphType <: LightGraphs.AbstractGraph
+function lg_to_nauty(g::GraphType) where GraphType <: Graphs.AbstractGraph
     # Nauty compatible adjacency matrix:
     #   An array of m*n WORDSIZE bitfields.
     #   Where n = num vertices, m = num_setwords = ((n-1) / WORDSIZE) + 1
@@ -334,7 +334,7 @@ function lg_to_nauty(g::GraphType) where GraphType <: LightGraphs.AbstractGraph
     #   each m*WORDSIZE row are significant.
 
     # assume WORDSIZE = 64, can use nauty_check to confirm values are OK.
-    num_vertices = LightGraphs.nv(g)
+    num_vertices = Graphs.nv(g)
     num_setwords = div(num_vertices - 1, WORDSIZE) + 1
 
     # Initialise
@@ -354,14 +354,8 @@ function lg_to_nauty(g::GraphType) where GraphType <: LightGraphs.AbstractGraph
     return arr.chunks #, num_setwords, num_vertices
 end
 
-function fadjlist(g::GraphType) where GraphType <: LightGraphs.SimpleGraphs.AbstractSimpleGraph
-    return g.fadjlist
-end
-
-import MetaGraphs
-
-function fadjlist(g::GraphType) where GraphType <: MetaGraphs.AbstractMetaGraph
-    return g.graph.fadjlist
+function fadjlist(g::GraphType) where GraphType <: Graphs.AbstractGraph
+    return Graphs.SimpleGraphs.adj(g)
 end
 
 """
@@ -423,10 +417,10 @@ end
 #=                          for name in fieldnames(x)]...))) =#
 #= end =#
 
-function LightGraphs.Experimental.has_isomorph(alg::NautyAlg, g1::LightGraphs.AbstractGraph, g2::LightGraphs.AbstractGraph;
+function Graphs.Experimental.has_isomorph(alg::NautyAlg, g1::Graphs.AbstractGraph, g2::Graphs.AbstractGraph;
                          vertex_relation::Union{Cvoid, Function}=nothing,
                          edge_relation::Union{Cvoid, Function}=nothing)::Bool
-    !LightGraphs.Experimental.could_have_isomorph(g1, g2) && return false
+    !Graphs.Experimental.could_have_isomorph(g1, g2) && return false
     
     baked_canonical_form(g1).canong == baked_canonical_form(g2).canong
 end

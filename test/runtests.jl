@@ -1,5 +1,5 @@
 import Nauty
-import LightGraphs
+import Graphs
 using BenchmarkTools
 using PerformanceTestTools: @include_foreach
 
@@ -16,7 +16,7 @@ else
 end
 
 "Convert the adjacency matrix of a directed graph into an undirected graph."
-helper(x) = LightGraphs.Graph(x .| x')
+helper(x) = Graphs.Graph(x .| x')
 
 iso1a = helper(Array([0 1 1; 0 0 0; 0 0 0]))
 @testset begin
@@ -27,8 +27,8 @@ iso1a = helper(Array([0 1 1; 0 0 0; 0 0 0]))
    @test n.lg_to_nauty(iso1b) == Array{UInt64,1}([0x4000000000000000, 0xa000000000000000, 0x4000000000000000])
 
    # Two simple isomorphic digraphs.
-   diso1a = LightGraphs.DiGraph(Array([0 1 1; 0 0 0; 0 0 0]))
-   diso1b = LightGraphs.DiGraph(Array([0 0 0; 1 0 1; 0 0 0]))
+   diso1a = Graphs.DiGraph(Array([0 1 1; 0 0 0; 0 0 0]))
+   diso1b = Graphs.DiGraph(Array([0 0 0; 1 0 1; 0 0 0]))
 
    @test n.lg_to_nauty(diso1a) == Array{UInt64,1}([0x6000000000000000, 0x0000000000000000, 0x0000000000000000])
    @test n.lg_to_nauty(diso1b) == Array{UInt64,1}([0x0000000000000000, 0xa000000000000000, 0x0000000000000000])
